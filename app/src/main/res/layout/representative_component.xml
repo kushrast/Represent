@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+
+
+    <TextView
+        android:id="@+id/representative_district"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="#ff112e51"
+        android:textSize="15sp"
+        android:gravity="center"
+        tools:text="District" />
+
+    <ImageView
+        android:id="@+id/representative_image"
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:id="@+id/representative_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="#ff112e51"
+        android:textSize="15sp"
+        android:gravity="center"
+        tools:text="Representative" />
+
+    <TextView
+        android:id="@+id/representative_party"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="#ff112e51"
+        android:textSize="15sp"
+        android:gravity="center"
+        tools:text="American" />
+
+    <TextView
+        android:id="@+id/representative_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="representative@senate.gov"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="#ff112e51"
+        android:ellipsize="end"
+        android:maxLines="2"/>
+
+    <TextView
+        android:id="@+id/representative_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="representative.senate.gov"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="#4689C8"
+        android:ellipsize="end"
+        android:maxLines="2"/>
+
+    <TextView
+        android:id="@+id/see_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="+ More"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:textColor="#ff112e51" />
+
+</LinearLayout>
