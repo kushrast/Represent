@@ -4,9 +4,11 @@ import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 class Representative {
     String first_name;
@@ -20,13 +22,15 @@ class Representative {
     String email;
     Date end;
 
-    HashMap<String, String> committees;
+    ArrayList<String> committees;
 
     Representative(String first, String last, String id, String type, String party, String district) {
         this.first_name = first;
         this.last_name = last;
         this.id = id;
-        this.repr_type = type;
+        if (type != null) {
+            this.repr_type = type.substring(0,1).toUpperCase() + type.substring(1);
+        }
         this.party = party;
         this.district = district;
     }
@@ -64,11 +68,11 @@ class Representative {
         this.email = email;
     }
 
-    public HashMap<String, String> getCommittees() {
+    public ArrayList<String> getCommittees() {
         return committees;
     }
 
-    public void setCommittees(HashMap<String, String> committees) {
+    public void setCommittees(ArrayList<String> committees) {
         this.committees = committees;
     }
 
@@ -86,6 +90,11 @@ class Representative {
     }
 
     public Date getTerm() {
-        return end;
+        return this.end;
+    }
+
+    public String getTermString() {
+        SimpleDateFormat sm = new SimpleDateFormat("MMMM yyyy", Locale.US);
+        return sm.format(this.end);
     }
 }

@@ -1,22 +1,25 @@
 package com.example.kushrastogi.represent;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainPage extends AppCompatActivity {
 
@@ -25,10 +28,8 @@ public class MainPage extends AppCompatActivity {
     ArrayList<Representative> senators;
     ArrayList<Representative> housereps;
 
-    private ListView senate_grid;
-    private ListView rep_grid;
-    private RepresentativeAdapter senate_adapter;
-    private RepresentativeAdapter rep_adapter;
+    private LinearLayout senate_grid;
+    private LinearLayout rep_grid;
 
     RepresentApplication app;
     @Override
@@ -41,30 +42,83 @@ public class MainPage extends AppCompatActivity {
         senators = new ArrayList<>();
         housereps = new ArrayList<>();
 
-        senate_grid = (ListView) findViewById(R.id.senate_layout);
-        rep_grid = (ListView) findViewById(R.id.representative_layout);
-
-        senate_grid.setOnTouchListener(new View.OnTouchListener(){
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return event.getAction() == MotionEvent.ACTION_MOVE;
-            }
-
-        });
-
-        rep_grid.setOnTouchListener(new View.OnTouchListener(){
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return event.getAction() == MotionEvent.ACTION_MOVE;
-            }
-
-        });
+        senate_grid = (LinearLayout) findViewById(R.id.senate_layout);
+        rep_grid = (LinearLayout) findViewById(R.id.representative_layout);
 
         refresh();
 
+        addRepresentatives(housereps, rep_grid);
+        addRepresentatives(senators, senate_grid);
+    }
 
+    void addRepresentatives(List<Representative> reps, LinearLayout grid) {
+        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        for (final Representative representative: reps) {
+            View listItem = vi.inflate(R.layout.representative_component, null);
+
+            TextView rep_district = (TextView) listItem.findViewById(R.id.representative_district);
+            rep_district.setText(representative.getDistrict());
+
+            TextView rep_name = (TextView) listItem.findViewById(R.id.representative_name);
+            rep_name.setText(representative.getName());
+
+            TextView rep_email = (TextView) listItem.findViewById(R.id.representative_email);
+            if (representative.getEmail() == null || representative.getEmail().equals("null")) {
+                rep_email.setText("Unavailable");
+                rep_email.setTypeface(rep_email.getTypeface(), Typeface.ITALIC);
+            } else {
+                rep_email.setText(representative.getEmail());
+            }
+
+            TextView rep_web = (TextView) listItem.findViewById(R.id.representative_website);
+            if (representative.getWebsite() == null || representative.getWebsite().equals("null")) {
+                rep_web.setText("Unavailable");
+                rep_web.setTextColor(0xff112e51);
+                rep_web.setTypeface(rep_email.getTypeface(), Typeface.ITALIC);
+            } else {
+                rep_web.setText(representative.getWebsite());
+                rep_web.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+
+            TextView party = (TextView) listItem.findViewById(R.id.representative_party);
+            party.setText(representative.party);
+            if (representative.party.equals("Republican")) {
+                party.setTextColor(0xff981b1e);
+            } else if (representative.party.equals("Democrat")) {
+                party.setTextColor(0xff205493);
+            } else {
+                party.setTextColor(0xff4c2c92);
+            }
+
+            ImageView image = (ImageView) listItem.findViewById(R.id.representative_image);
+            String image_url = String.format("http://bioguide.congress.gov/bioguide/photo/%s/%s.jpg", representative.id.charAt(0), representative.id);
+            Log.d("image url", image_url);
+
+            Glide.with(this)
+                    .load(image_url)
+                    .into(image);
+
+            listItem.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    // TODO Auto-generated method stub
+                    //Do your task here
+                    Intent intent = new Intent(MainPage.this, DetailsPage.class);
+                    intent.putExtra("id", representative.id);
+                    MainPage.this.startActivity(intent);
+                }
+            });
+
+            try{
+
+                grid.addView(listItem);
+            }catch(Throwable e) {
+                Log.e("BurgerClub", "MEX: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 
     void changeLocation(View v) {
@@ -82,19 +136,11 @@ public class MainPage extends AppCompatActivity {
         location.setText(lt.getVal());
 
         for (Representative rep: reps.values()) {
-            if (rep.getRepr_type().equals("senator")) {
+            if (rep.getRepr_type().equals("Senator")) {
                 senators.add(rep);
             } else {
                 housereps.add(rep);
             }
         }
-
-        Log.d("senators", senators.toString());
-
-        senate_adapter = new RepresentativeAdapter(this, senators);
-        senate_grid.setAdapter(senate_adapter);
-
-        rep_adapter = new RepresentativeAdapter(this, housereps);
-        rep_grid.setAdapter(rep_adapter);
     }
 }

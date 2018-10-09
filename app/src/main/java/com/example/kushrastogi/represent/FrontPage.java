@@ -1,6 +1,7 @@
 package com.example.kushrastogi.represent;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -31,12 +32,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import org.json.*;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-public class FrontPage extends AppCompatActivity {
+public class FrontPage extends Activity {
 
     private FusedLocationProviderClient LocationProvider;
     RequestQueue queue;
@@ -46,7 +48,7 @@ public class FrontPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_front_page);
+        setContentView((int)R.layout.activity_front_page);
 
         LocationProvider = LocationServices.getFusedLocationProviderClient(this);
 
@@ -351,13 +353,13 @@ public class FrontPage extends AppCompatActivity {
                     JSONObject recent_role = roles.getJSONObject(0);
                     String end = recent_role.getString("end_date");
                     representative.setEmail(recent_role.getString("contact_form"));
-                    HashMap<String, String> committees = new HashMap<>();
+                    ArrayList<String> committees = new ArrayList<>();
                     JSONArray committee_objects = recent_role.getJSONArray("committees");
                     for (int i = 0; i < committee_objects.length() && i < 5; i++) {
                         JSONObject committee = committee_objects.getJSONObject(i);
                         String name = committee.getString("name");
-                        String url = committee.getString("api_uri");
-                        committees.put(name, url);
+                        Log.d("committees", name);
+                        committees.add(name);
                     }
 
                     representative.setCommittees(committees);

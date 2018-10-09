@@ -1,19 +1,31 @@
 package com.example.kushrastogi.represent;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -53,6 +65,7 @@ public class DetailsPage extends AppCompatActivity{
             rep_web.setTypeface(rep_email.getTypeface(), Typeface.ITALIC);
         } else {
             rep_web.setText(representative.getWebsite());
+            rep_web.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
         TextView party = (TextView) findViewById(R.id.representative_party);
@@ -66,47 +79,21 @@ public class DetailsPage extends AppCompatActivity{
         }
 
         ImageView image = (ImageView) findViewById(R.id.representative_image);
-        String image_url = String.format("http://bioguide.congress.gov/bioguide/photo/%s/%s.jpg\n", representative.id.charAt(0), representative.id);
+        String image_url = String.format("http://bioguide.congress.gov/bioguide/photo/%s/%s.jpg", representative.id.charAt(0), representative.id);
         Log.d("image url", image_url);
 
-        TextView term_ends = (TextView) findViewById(R.id.representative_term);
-        if (representative.getTerm() != null) {
-            Date termEnd = representative.getTerm();
-            term_ends.setText("Term ends: " + termEnd.toString());
-            Date curr = new Date();
-            if (termEnd.getYear() - curr.getYear() <= 1) {
-                term_ends.setBackgroundColor(0xffFF8C00);
-            }
-        }
+        RecyclerView committees = findViewById(R.id.committees);
+        Log.d("committees", representative.committees.toString());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        committees.setLayoutManager(mLayoutManager);
+        committees.setAdapter(new RecycleAdapter(representative.committees));
 
-        new DownloadImageTask(image, representative.party)
-                .execute(image_url);
+        Glide.with(this)
+                .load(image_url)
+                .into(image);
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-        String party;
-
-        public DownloadImageTask(ImageView bmImage, String party) {
-            this.bmImage = bmImage;
-            this.party = party;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
+    public void goBack(View v) {
+        finish();
     }
 }

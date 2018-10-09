@@ -17,20 +17,20 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Location"
-            android:textSize="16sp"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/change_loc"
-            android:layout_width="85dp"
-            android:layout_height="33dp"
+            android:layout_width="115dp"
+            android:layout_height="45dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:onClick="changeLocation"
             android:text="Change"
-            android:textSize="12sp"
+            android:textSize="17dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/location" />
@@ -43,13 +43,14 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:text="Senators"
-            android:textSize="27sp"
+            android:textSize="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/change_loc" />
 
-        <ListView
+        <LinearLayout
             android:id="@+id/senate_layout"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -59,8 +60,7 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/senator_title"></ListView>
-
+            app:layout_constraintTop_toBottomOf="@+id/senator_title"></LinearLayout>
 
 
         <TextView
@@ -71,13 +71,14 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:text="House Reps."
-            android:textSize="27sp"
+            android:textSize="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/senate_layout" />
 
-        <ListView
+        <LinearLayout
             android:id="@+id/representative_layout"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -86,7 +87,7 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/representative_title"></ListView>
+            app:layout_constraintTop_toBottomOf="@+id/representative_title"></LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
 
